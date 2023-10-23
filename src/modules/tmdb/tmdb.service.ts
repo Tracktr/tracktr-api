@@ -6,15 +6,6 @@ import {fetchFromTMDB} from "../../lib/fetch/tmdbFetch";
 export class TMDBService {
   @Get('id/:id')
   async getMovieById(@Param('id') id: string): Promise<Movie> {
-    const data = fetchFromTMDB({
-      type: 'movie',
-      settings: `${id}?language=en-US`
-    });
-
-    if(data){
-      return data
-    } else {
-      throw new BadRequestException();
-    }
+    return await fetchFromTMDB<Movie>("movie", `${id}?language=en-US`);
   }
 }
