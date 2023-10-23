@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+const SWAGGER_UI_PATH =
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
