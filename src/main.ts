@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+const SWAGGER_UI_PATH =
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -13,11 +16,10 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document, {
-    customCssUrl:
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.0.0/swagger-ui.min.css',
+    customCssUrl: `${SWAGGER_UI_PATH}swagger-ui.min.css`,
     customJs: [
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui-bundle.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.9.0/swagger-ui-standalone-preset.js',
+      `${SWAGGER_UI_PATH}swagger-ui-bundle.js`,
+      `${SWAGGER_UI_PATH}swagger-ui-standalone-preset.js`,
     ],
   });
 
