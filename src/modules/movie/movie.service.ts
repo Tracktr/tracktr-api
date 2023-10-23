@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Movie } from './interfaces/movie.interface';
 import { TMDBService } from '../tmdb/tmdb.service';
+import {Movie} from "../tmdb/interfaces/movie.interface";
 
 @Injectable()
 export class MovieService {
   constructor(private readonly tmdbService: TMDBService) {}
 
-  getMovie(): Movie {
-    return this.tmdbService.getMovieById('123');
+  getMovie(id: string): Promise<Movie> {
+    return this.tmdbService.getMovieById(id);
   }
 }

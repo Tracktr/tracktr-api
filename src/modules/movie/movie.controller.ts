@@ -1,13 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import {Controller, Get, Param} from '@nestjs/common';
 import { MovieService } from './movie.service';
-import { Movie } from './interfaces/movie.interface';
+import {Movie} from "../tmdb/interfaces/movie.interface";
 
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
-  @Get()
-  getMovie(): Movie {
-    return this.movieService.getMovie();
+  @Get(':id')
+  getMovie(@Param('id') id: string): Promise<Movie> {
+    return this.movieService.getMovie(id);
   }
 }
