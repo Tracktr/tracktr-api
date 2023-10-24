@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { Movie } from './interfaces/movie.interface';
+import { TMDBService } from '../tmdb/tmdb.service';
+import { Movie } from '../tmdb/interfaces/movie.interface';
+import { PathTypes } from '../tmdb/interfaces/types.enum';
 
 @Injectable()
 export class MovieService {
-  getMovie(): Movie {
-    return {
-      name: 'Interstellar',
-    };
+  constructor(private readonly tmdbService: TMDBService) {}
+
+  getMovie(id: number): Promise<Movie> {
+    return this.tmdbService.fetch<Movie>(PathTypes.Movie, {
+      id: id,
+      language: 'en-US',
+    });
   }
 }
