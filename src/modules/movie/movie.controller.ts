@@ -1,6 +1,6 @@
-import {Controller, Get, Param} from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { MovieService } from './movie.service';
-import {Movie} from "../tmdb/interfaces/movie.interface";
+import { Movie } from '../tmdb/interfaces/movie.interface';
 
 @Controller('movie')
 export class MovieController {
