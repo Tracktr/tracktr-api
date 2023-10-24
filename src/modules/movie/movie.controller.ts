@@ -7,7 +7,7 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get(':id')
-  getMovie(@Param('id') id: string): Promise<Movie> {
+  getMovie(@Param('id') id: number): Promise<Movie> {
     return this.movieService.getMovie(id);
   }
 }

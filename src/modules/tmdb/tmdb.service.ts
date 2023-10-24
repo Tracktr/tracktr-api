@@ -1,17 +1,16 @@
-import {
-  Get,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Param,
-} from '@nestjs/common';
-import { Movie } from './interfaces/movie.interface';
+import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 
 @Injectable()
 export class TMDBService {
-  @Get('id/:id')
-  async getMovieById(@Param('id') id: string): Promise<Movie> {
-    const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;
+  async fetch<T>(
+    @Param('type') type: string,
+    @Param('id') id: number,
+    @Param('language') language: string = 'en-US',
+  ): Promise<T> {
+    const url = new URL('https://api.themoviedb.org/');
+    url.pathname = `3/${type}/${id}`;
+    url.searchParams.set('language', language);
+
     const options = {
       method: 'GET',
       headers: {
@@ -22,7 +21,7 @@ export class TMDBService {
       },
     };
 
-    return fetch(url, options).then((response) => {
+    return fetch(url.href, options).then((response) => {
       if (!response.ok) {
         throw new HttpException(
           'Error fetching from TMDB',
@@ -30,7 +29,7 @@ export class TMDBService {
         );
       }
 
-      return response.json() as Promise<Movie>;
+      return response.json() as Promise<T>;
     });
   }
 }

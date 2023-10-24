@@ -24,10 +24,6 @@ export interface Movie {
   video: boolean;
   vote_average: string;
   vote_count: number;
-
-  success?: boolean;
-  status_code?: string;
-  status_message?: string;
 }
 
 interface Genres {
