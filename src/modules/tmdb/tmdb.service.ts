@@ -1,18 +1,24 @@
 import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 import { QueryParams } from './interfaces/queryparams.interface';
-import { PathTypes } from './interfaces/types.enum';
+import { URLParser } from './parsers/URLParser';
+import { TMDB_URLS } from './interfaces/types.enum';
 
 @Injectable()
 export class TMDBService {
-  async fetch<T>(
-    @Param('type') type: PathTypes,
-    @Param('queryParams') queryParams: QueryParams = {},
+  async get<T>(
+    @Param('id') id: number,
+    @Param('urlString') urlString: TMDB_URLS,
+    @Param('queryParams')
+    queryParams: QueryParams = {
+      language: 'en-US',
+    },
   ): Promise<T> {
-    const url = new URL('https://api.themoviedb.org/');
-    url.pathname = `3/${type}`;
-    url.pathname += queryParams.id ? `/${queryParams.id}` : '';
-    url.searchParams.set('language', queryParams.language || 'en-US');
+    const url = URLParser(id, urlString, queryParams);
 
+    return await this.getData<T>(url);
+  }
+
+  async getData<T>(url: URL): Promise<T> {
     const options = {
       method: 'GET',
       headers: {
