@@ -1,8 +1,7 @@
-import { MovieSubTypes } from './types.enum';
+import { APPENDABLE_RESPONSES } from './types.enum';
 
-export interface MovieQueryParams {
-  id?: number;
+export interface QueryParams {
   language: string;
   adult?: boolean;
-  append_to_response?: MovieSubTypes[];
+  append_to_response?: APPENDABLE_RESPONSES[];
 }

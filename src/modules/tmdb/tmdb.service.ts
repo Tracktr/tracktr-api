@@ -1,29 +1,24 @@
 import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
-import { MovieQueryParams } from './interfaces/queryparams.interface';
-import { MovieSubTypes } from './interfaces/types.enum';
+import { QueryParams } from './interfaces/queryparams.interface';
+import { URLParser } from './parsers/URLParser';
+import { TMDB_URLS } from './interfaces/types.enum';
 
 @Injectable()
 export class TMDBService {
-  async fetchMovies(
+  async get<T>(
+    @Param('id') id: number,
+    @Param('urlString') urlString: TMDB_URLS,
     @Param('queryParams')
-    queryParams: MovieQueryParams = {
+    queryParams: QueryParams = {
       language: 'en-US',
     },
-    @Param('subType') subType?: MovieSubTypes,
-  ): Promise<any> {
-    const url = new URL('https://api.themoviedb.org/');
-    url.pathname = `3/movie/`;
-    url.pathname += queryParams.id ? `${queryParams.id}` : '';
-    if (subType) url.pathname += `/${subType}`;
-    if (queryParams.append_to_response) {
-      url.searchParams.set(
-        'append_to_response',
-        queryParams.append_to_response.join(','),
-      );
-    }
+  ): Promise<T> {
+    const url = URLParser(id, urlString, queryParams);
 
-    url.searchParams.set('language', queryParams.language || 'en-US');
+    return await this.getData<T>(url);
+  }
 
+  async getData<T>(url: URL): Promise<T> {
     const options = {
       method: 'GET',
       headers: {
@@ -42,7 +37,7 @@ export class TMDBService {
         );
       }
 
-      return response.json();
+      return response.json() as Promise<T>;
     });
   }
 }
