@@ -13,8 +13,6 @@ export class TMDBService {
     url.pathname += queryParams.id ? `/${queryParams.id}` : '';
     url.searchParams.set('language', queryParams.language || 'en-US');
 
-    console.log(url.href);
-
     const options = {
       method: 'GET',
       headers: {
