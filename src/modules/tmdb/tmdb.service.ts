@@ -1,16 +1,27 @@
 import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
-import { QueryParams } from './interfaces/queryparams.interface';
-import { PathTypes } from './interfaces/types.enum';
+import { MovieQueryParams } from './interfaces/queryparams.interface';
+import { MovieSubTypes } from './interfaces/types.enum';
 
 @Injectable()
 export class TMDBService {
-  async fetch<T>(
-    @Param('type') type: PathTypes,
-    @Param('queryParams') queryParams: QueryParams = {},
-  ): Promise<T> {
+  async fetchMovies(
+    @Param('queryParams')
+    queryParams: MovieQueryParams = {
+      language: 'en-US',
+    },
+    @Param('subType') subType?: MovieSubTypes,
+  ): Promise<any> {
     const url = new URL('https://api.themoviedb.org/');
-    url.pathname = `3/${type}`;
-    url.pathname += queryParams.id ? `/${queryParams.id}` : '';
+    url.pathname = `3/movie/`;
+    url.pathname += queryParams.id ? `${queryParams.id}` : '';
+    if (subType) url.pathname += `/${subType}`;
+    if (queryParams.append_to_response) {
+      url.searchParams.set(
+        'append_to_response',
+        queryParams.append_to_response.join(','),
+      );
+    }
+
     url.searchParams.set('language', queryParams.language || 'en-US');
 
     const options = {
@@ -31,7 +42,7 @@ export class TMDBService {
         );
       }
 
-      return response.json() as Promise<T>;
+      return response.json();
     });
   }
 }
